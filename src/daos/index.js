@@ -17,8 +17,8 @@ switch(process.env.DATABASE){
         const { default: ProductoDaoMongo } = await import("./productos/productoDaoMongo.js");
         const { default: CarritoDaoMongo } = await import("./carritos/carritoDaoMongo.js");
 
-        ProductoDao = ProductoDaoMongo;
-        CarritoDao = CarritoDaoMongo;
+        ProductoDao = new ProductoDaoMongo;
+        CarritoDao = new CarritoDaoMongo;
     
     break;
 }
