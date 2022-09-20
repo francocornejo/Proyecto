@@ -1,17 +1,7 @@
-import { promises as fs } from 'fs';
-import config from '../config.js';
-import mongoose from 'mongoose';
-
-await mongoose.connect(config.mongodb.connectionString, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  });
-
-  console.log('Conexion establecida con la DBMongo')
+import mongoose from 'mongoose'
 
 export default class ContenedorMongo {
     constructor(nameCollection, schema) {
-
         this.collection = mongoose.model(nameCollection, schema);
     }
 
@@ -26,4 +16,4 @@ export default class ContenedorMongo {
         const doc = await this.collection.find({ });
         return doc;
     }
-}  
+}
