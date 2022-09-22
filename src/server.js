@@ -19,7 +19,15 @@ import logger from'./config/winston.js'
 import * as url from 'url';
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
-app.engine(".hbs", exphbs({ extname: ".hbs", defaultLayout: "main.hbs" }));
+app.engine(".hbs", exphbs({ 
+    extname: ".hbs", 
+    defaultLayout: "main.hbs", 
+    runtimeOptions: {
+      allowProtoPropertiesByDefault: true,
+      allowProtoMethodsByDefault: true
+    } 
+  })
+);
 app.set("view engine", ".hbs");
 
 app.use(express.static(__dirname + "/views"));

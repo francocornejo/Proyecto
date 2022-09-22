@@ -14,12 +14,6 @@ export default class ProductoDaoMongo extends ContenedorMongo{
         }))
     }
 
-    async allProduct(){
-        const doc = await this.collection.find({ });
-        console.log("asdasdadsadsadas", doc)
-        return doc;
-    }
-
     async newProduct(title, description, code, price, thumbnail, stock){
         const doc = new this.collection({title, description, code, price, thumbnail, stock,timestamp:Date.now()})
         await doc.save()   
