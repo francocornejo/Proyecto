@@ -9,7 +9,7 @@ import bcrypt from 'bcrypt'
 import exphbs from 'express-handlebars'
 import { Strategy as LocalStrategy } from "passport-local";
 import mongoose from 'mongoose'
-import Usuario from'./models/models.js'
+import Usuario from './models/models.js'
 import os from'os';
 import cluster from"cluster";
 const cpus = os.cpus();
@@ -30,7 +30,7 @@ app.engine(".hbs", exphbs({
 );
 app.set("view engine", ".hbs");
 
-app.use(express.static(__dirname + "/views"));
+app.use(express.static(__dirname + "../views"));
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
@@ -68,7 +68,8 @@ const registerStrategy = new LocalStrategy(
 
           if(userExist){
               return done("Nombre de usuario ya creado", false)
-          }else{
+          }
+            console.log("asd",req.file)
               const nuevoUsuario = {
                   username: username,
                   password: hashPassword(password),
@@ -78,11 +79,10 @@ const registerStrategy = new LocalStrategy(
                   address: req.body.address,
                   edad: req.body.edad,
                   phone: req.body.phone,
-                  avatar: req.body.image 
+                  avatar: req.file
               }
               const crearUsuario = await Usuario.create(nuevoUsuario)
               return done(null, crearUsuario)
-          }
       }catch(err){
           logger.log('Error: ', err)
           done(err)

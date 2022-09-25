@@ -1,5 +1,8 @@
 import path from'path'
 import util from'util'
+import { transporter } from '../config/mailer.js';
+import envioSms from '../twilio/sms.js'
+import mainWhatsapp from '../twilio/whatsapp.js'
 
 import * as url from 'url';
 const __filename = url.fileURLToPath(import.meta.url);
@@ -44,9 +47,31 @@ export const getSignup = (req, res) => {
   res.sendFile(path.join(__dirname, "../../views/register.html"));
 }
 
-export const postRegister = (req, res) =>  {
+export const postRegister = async (req, res) =>  {
     let user = req.user
     console.log(user)
+
+    await transporter.sendMail({
+      from: '"Usuario Creado!👻" <cornejo.francodavid@gmail.com>', // sender address
+      to: req.user.email, // list of receivers
+      subject: "Hello ✔", // Subject line
+      text: "Hello world?", // plain text body
+      html: `Nuevo Registro de ${req.user.firstName} - ${req.user.username} \n
+      <h1>Datos de Registro</h1>
+      <ul>
+        <li>E-mail: ${req.user.email} </li>
+        <li>Nombre: ${req.user.firstName} </li>
+        <li>Dirección: ${req.user.address} </li>
+        <li>Edad: ${req.user.edad} </li>
+        <li>Teléfono: ${req.user.phone} </li>
+        <li>avatar: http://localhost:8080/image/${req.user.avatar}  </li>
+     </ul>`, // html body
+    });
+
+    const mensaje = "Usuario creado con exito"
+    envioSms(req.user.phone, mensaje)
+    mainWhatsapp(mensaje)
+
     res.sendFile(path.join(__dirname, "../../views/register-ok.html"))
 }
 
@@ -104,6 +129,6 @@ export const info = (req, res) => {
                 <li>Numero de procesadores: ${os.cpus().length}</li>
             </ul>`)
     } catch (error) {
-        logger.error('Error al buscar la informacion del sistema: ', error)
+      logger.error('Error al buscar la informacion del sistema: ', error)
     }
 }

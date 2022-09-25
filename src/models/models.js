@@ -10,4 +10,5 @@ export default mongoose.model('Usuario',{
     edad: Number,
     phone: Number,
     avatar: String
-});
+    }
+);
