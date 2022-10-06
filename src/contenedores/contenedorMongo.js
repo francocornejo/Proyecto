@@ -1,4 +1,11 @@
 import mongoose from 'mongoose'
+import dotenv from 'dotenv'
+dotenv.config()
+
+mongoose.connect(process.env.URL_MONGO, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
 
 export default class ContenedorMongo {
     constructor(nameCollection, schema) {
