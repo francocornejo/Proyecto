@@ -12,7 +12,7 @@ export default class UsuarioDaoMongo extends ContenedorMongo {
       direccion:{ type: String, require: true},
       edad:{ type: String, require: true},
       telefono:{ type: String, require: true },
-      avatar:{ type: String, require: true}
+      avatar:{ type: String, require: true},
     })
     )
   }

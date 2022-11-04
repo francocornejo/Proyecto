@@ -60,26 +60,24 @@ function isValidPassword(reqPassword, hashedPassword) {
 
 const registerStrategy = new LocalStrategy(
   {passReqToCallback: true},
-
   async (req, username, password, done) =>{
       try{
           const userExist = await Users.findOne({username})
-
           if(userExist){
               return done("Nombre de usuario ya creado", false)
           }
             console.log("asd",req.file)
-              const nuevoUsuario = {
-                username: username,
-                password: hashPassword(password),
-                email: req.body.email,
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                address: req.body.address,
-                edad: req.body.edad,
-                phone: req.body.phone,
-                avatar: req.file
-              }
+            const nuevoUsuario = {
+              username: username,
+              password: hashPassword(password),
+              email: req.body.email,
+              firstName: req.body.firstName,
+              lastName: req.body.lastName,
+              address: req.body.address,
+              edad: req.body.edad,
+              phone: req.body.phone,
+              avatar: req.file
+            }
               const crearUsuario = await Users.create(nuevoUsuario)
               return done(null, crearUsuario)
       }catch(err){

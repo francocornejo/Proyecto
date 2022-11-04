@@ -1,25 +1,22 @@
 import path from'path'
 import util from'util'
 import { transporter } from '../config/mailer.js';
-import envioSms from '../twilio/sms.js'
-import mainWhatsapp from '../twilio/whatsapp.js'
+import ProductoDaoFactory from '../classes/ProductoDaoFactory.class.js'
+const getDaos = ProductoDaoFactory.getDao()
+
 
 import * as url from 'url';
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
-export const getLogin = (req, res) => {
+ export const getLogin = (req, res) => {
   if (req.isAuthenticated()) {
     let user = req.user;
-    //console.log("user logueado");
+    console.log("USER",user)
     if (user.username === "admin") {
-      res.render("post-product", {
-        title: user.title,
-        price: user.price,
-        thumbnail: user.thumbnail
-      })
-    }else{
       res.redirect("/api/home")
+    }else{
+      res.redirect("/api/")
     } 
   }else {
         console.log("user NO logueado");
@@ -33,18 +30,38 @@ export const getUserInfo = (req, res)=>{
 }
 
 export const getHome = (req, res) => {
-  let user = req.user
-  res.render("login-ok", {
-    usuario: user.username,
-    nombre: user.firstName,
-    apellido: user.lastName,
-    email: user.email,
-    avatar: user.avatar
-  })
+  if (req.isAuthenticated()) {
+    let user = req.user;
+  res.sendFile(path.join(__dirname, "../../views/home.html"));
+}
+}
+
+export const getHomeAdmin =(req,res)=>{
+  res.sendFile(path.join(__dirname, "../../views/admin.html"));
+}
+
+export const postLogin = (req, res) => {
+  if (req.isAuthenticated()) {
+    let user = req.user;
+    console.log("USER",user)
+    if (user.username === "admin") {
+      res.redirect("/api/home")
+    }else{
+      res.redirect("/api/")
+    } 
+  }else {
+        console.log("user NO logueado");
+        res.sendFile(path.join(__dirname, "../../views/login.html"));
+  }
 }
 
 export const getSignup = (req, res) => {
   res.sendFile(path.join(__dirname, "../../views/register.html"));
+}
+
+export const getCatalogo = async (req, res) => {
+  const verProductos = await getDaos.getAll()
+    res.render("catalogo", {verProductos})
 }
 
 export const postRegister = async (req, res) =>  {
@@ -53,9 +70,9 @@ export const postRegister = async (req, res) =>  {
 
     await transporter.sendMail({
       from: '"Usuario Creado!👻" <cornejo.francodavid@gmail.com>', // sender address
-      to: req.user.email, // list of receivers
-      subject: "Hello ✔", // Subject line
-      text: "Hello world?", // plain text body
+      to: req.user.email,
+      subject: "Hello ✔",
+      text: "Hello world?",
       html: `Nuevo Registro de ${req.user.firstName} - ${req.user.username} \n
       <h1>Datos de Registro</h1>
       <ul>
@@ -65,19 +82,10 @@ export const postRegister = async (req, res) =>  {
         <li>Edad: ${req.user.edad} </li>
         <li>Teléfono: ${req.user.phone} </li>
         <li>avatar: http://localhost:8080/image/${req.user.avatar}  </li>
-     </ul>`, // html body
+     </ul>`,
     });
 
-    const mensaje = "Usuario creado con exito"
-    envioSms(req.user.phone, mensaje)
-    mainWhatsapp(mensaje)
-
     res.sendFile(path.join(__dirname, "../../views/register-ok.html"))
-}
-
-export const postLogin = (req, res) => {
-    let user = req.user
-    res.redirect('/api/home')
 }
 
 export const getFailsignup = (req, res) => {
