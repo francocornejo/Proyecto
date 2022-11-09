@@ -1,21 +1,30 @@
 import {CarritoDao} from '../daos/index.js';
 import { ProductoDao } from '../daos/index.js';
-import {getUserCartService} from '../services/cartService.js'
-/* const {addProductService, getUserCartService,cartCheckoutService,
-    deleteProductFromCartService } = require ('../service/cart.service.js') */
+import {getUserCartService, addProductService, deleteProductFromCartService} from '../services/cartService.js'
 
 export const postCarrito = async (req, res)=>{
+    console.log("POST", req)
+    const usuario = req.user.username
+    const elemento = await CarritoDao.newCart(usuario)
+    console.log("Elemento: ", elemento)
+    res.redirect("/api/carrito")
+}
+
+export const addProduct = async (req,res)=>{
+    const cantidad= req.body.cant || 1
+    const id_prod=req.params.id
     const username = req.user.username
-    console.log(username)
-    const elemento = await CarritoDao.newCart(username)
-    res.json(elemento)
+    addProductService(cantidad,id_prod,username)
+    res.redirect('/api/productos')
+    //res.json(carrito)
 }
 
 //Esta funcion devuelve lo que hay en carrito,
 //completar hbs
 export const getUserCart = async (req, res)=>{ 
-    const username = req.user.username
-    let carrito = await getUserCartService(username)
+    console.log("GET", req)
+    const usuario = req.user.username
+    let carrito = await getUserCartService(usuario)
     if(!carrito){
         res.render('cart.hbs', false)
     }else{
@@ -59,4 +68,13 @@ export const deleteCarrito = async (req, res) => {
 export const listarCarritos =  async (req, res) => {
     const verCarritos = await CarritoDao.getAll()
     res.json(verCarritos)
+}
+
+export const deleteProductFromCart = async (req,res)=>{  
+    const id_prod=req.params.id
+        console.log('id_prod',id_prod);
+    const username = req.user.username
+        console.log('username',username);
+    await   deleteProductFromCartService(id_prod,username)
+    res.redirect('/api/cart') 
 }

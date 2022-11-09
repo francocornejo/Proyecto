@@ -1,6 +1,6 @@
 import { Router }from 'express';
 import { getProductos, postProductos, getProductoId, putProduct,deleteProduct, loadProduct} from '../controllers/productoController.js';
-import { postCarrito, deleteCarrito, getUserCart, verCarrito, postProdInCart} from '../controllers/carritoController.js';
+import { postCarrito, deleteCarrito, getUserCart, verCarrito, addProduct, deleteProductFromCart} from '../controllers/carritoController.js';
 import { getLogin, getSignup, postRegister, postLogin, getFailsignup, getFaillogin, getCatalogo, getLogout, checkAuth, rutaProtegida, info, getHome, getUserInfo, getHomeAdmin } from '../controllers/usersController.js'
 const router = Router();
 import upload from '../multer/loadFile.js'
@@ -17,10 +17,9 @@ router.post('/load', loadProduct)
 //Rutas Carrito
 router.post('/carrito', postCarrito)
 router.get('/carrito', getUserCart)
-router.delete('/carrito/:id', deleteCarrito)
+router.get('/carrito/deleteproducto/:id', deleteProductFromCart)
 router.get('/carrito/:id/productos', verCarrito)
-router.post('/carrito/:id_cart/productos/:id_prod', postProdInCart)
-
+router.post('/carrito/productos/:id', addProduct)
 //Rutas de Login y Registro
 router.get("/", getHome) //noAdmin
 router.get("/home", getHomeAdmin)

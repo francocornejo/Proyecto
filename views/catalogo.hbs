@@ -29,7 +29,10 @@
 
                     </td>
                     <td>
-                        <a class="btn btn-warning" href="/api/carrito">agregar</a>                      
+                        <form action="/api/carrito/productos/{{this._id}}" method="post">
+                            <button type="submit">Agregar</button>
+                        </form> 
+                        <a href="/api/carrito">Volver al carrito</a>      
                     </td>
                 </tr>  
             

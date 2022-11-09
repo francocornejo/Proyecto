@@ -11,10 +11,18 @@ export default class CarritoDaoMongo extends ContenedorMongo{
     }
 
     async newCart(user){
-        const doc = new this.collection({ username: user ,timestamp: Date.now(), products: ''})
-        await doc.save();
+        console.log("USER: ",user)
+        if(! await this.collection.findOne({ username: user})){
+            const doc = new this.collection({ username: user ,timestamp: Date.now(), products: ''})
+            console.log("dentro del if", doc)
+            await doc.save();
+            return doc
+        }else{
+            console.log("carrito ya creado")
+        }
+        
 
-        console.log(this.collection);
+        
     }
 
     async cartByUsername(user){
