@@ -26,3 +26,19 @@ const productoSchema= mongoose.Schema({
 })
 
 export const Productos = mongoose.model("productos", productoSchema)
+
+const carritoSchema = mongoose.Schema({
+  username: { type: String, require: true, max: 200},
+  timestamp: {type: String, required: true},
+  productos: {type: Array, required: true}
+})
+export const Carrito = mongoose.model("carrito", carritoSchema)
+
+const chatSchema = new mongoose.Schema({
+  mail: { type: String, require: true, max: 200 },
+  type: { type: String, require: true, max: 200 },
+  tiempochat:{ type: Date, required: true },
+  message:{ type: String, require: true},
+})
+
+export const Chats = mongoose.model("chats", chatSchema)

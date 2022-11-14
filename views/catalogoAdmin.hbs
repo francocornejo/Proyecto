@@ -7,30 +7,23 @@
                 <th scope="col">Nombre</th>
                 <th scope="col">Precio</th>
                 <th scope="col">Imagen</th>
-                <th scope="col">Cantidad</th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
             {{#each verProductos}}
-
                 <tr scope="row" id={{this._id}}>
-                     
                     <td>
-                            {{this.title}} 
+                        {{this.title}} 
                     </td>
                     <td>
-                            {{this.price}}
+                        {{this.price}}
                     </td>
                     <td>
                         <img src= {{this.thumbnail}}   alt= {{this.title}} style="width:3rem;">
                     </td>
                     <td>
-
-                    </td>
-                    <td>
-                        <form action="/api/carrito/productos/{{this._id}}" method="post">
-                            <button class="btn btn-outline-success" type="submit">Agregar</button>
+                        <form action="/api/productoDelete/{{this._id}}" method="delete">
+                            <button class="btn btn-outline-success" type="submit">Eliminar</button>
                         </form> 
                     </td>
                 </tr>  

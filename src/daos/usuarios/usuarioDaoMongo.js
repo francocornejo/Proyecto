@@ -1,20 +1,12 @@
-import ContenedorMongo from "../../contenedores/contenedorMongo.js";
-import mongoose from "mongoose";
+import {Users} from '../../models/models.js'
+import DAO from "../../classes/Dao.class.js";
+import MongoClient from "../../classes/MongoClient.class.js"
 
-export default class UsuarioDaoMongo extends ContenedorMongo {
+export default class UsuarioDaoMongo extends DAO {
   constructor() {
-    super("usuarios", new mongoose.Schema({
-      username: { type: String, require: true, max: 200, unique:true},
-      password: { type: String, require: true, max: 200 },
-      email: {type: String, require: true}, 
-      nombre:{ type: String, require: true},
-      apellido: { type: String, require: true},
-      direccion:{ type: String, require: true},
-      edad:{ type: String, require: true},
-      telefono:{ type: String, require: true },
-      avatar:{ type: String, require: true},
-    })
-    )
+    super();
+      this.collection = Users
+      this.db = new MongoClient();
   }
 
   async newUser(username, password, nombre, apellido, direccion, edad, telefono, avatar){

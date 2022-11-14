@@ -3,7 +3,6 @@ import { ProductoDao } from '../daos/index.js';
 import {getUserCartService, addProductService, deleteProductFromCartService} from '../services/cartService.js'
 
 export const postCarrito = async (req, res)=>{
-    console.log("POST", req)
     const usuario = req.user.username
     const elemento = await CarritoDao.newCart(usuario)
     console.log("Elemento: ", elemento)
@@ -22,7 +21,6 @@ export const addProduct = async (req,res)=>{
 //Esta funcion devuelve lo que hay en carrito,
 //completar hbs
 export const getUserCart = async (req, res)=>{ 
-    console.log("GET", req)
     const usuario = req.user.username
     let carrito = await getUserCartService(usuario)
     if(!carrito){
@@ -39,14 +37,8 @@ export const postProdInCart = async (req, res) => {
     let cart = await CarritoDao.getById(id_cart)
     const elementoProd = await ProductoDao.getById(id_prod)
 
-    console.log("cart: ", id_cart)
-    console.log("elementoProd: ", id_prod)
-    console.log("QUE VIENE EN CART", cart)
-    console.log("aca el prod", elementoProd)
     if(cart && elementoProd){
-        console.log("Antes del push",cart[0].productos)
         cart[0].productos.push(elementoProd[0])
-        console.log("Despues del push",cart[0])
     }
     cart = await CarritoDao.update(cart[0]._id, cart[0].productos)
     res.json(cart)
@@ -72,9 +64,7 @@ export const listarCarritos =  async (req, res) => {
 
 export const deleteProductFromCart = async (req,res)=>{  
     const id_prod=req.params.id
-        console.log('id_prod',id_prod);
     const username = req.user.username
-        console.log('username',username);
-    await   deleteProductFromCartService(id_prod,username)
-    res.redirect('/api/cart') 
+    await deleteProductFromCartService(id_prod,username)
+    res.redirect('/api/carrito') 
 }

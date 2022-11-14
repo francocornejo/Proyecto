@@ -12,7 +12,6 @@ const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
  export const getLogin = (req, res) => {
   if (req.isAuthenticated()) {
     let user = req.user;
-    console.log("USER",user)
     if (user.username === "admin") {
       res.redirect("/api/home")
     }else{
@@ -50,8 +49,8 @@ export const postLogin = (req, res) => {
       res.redirect("/api/")
     } 
   }else {
-        console.log("user NO logueado");
-        res.sendFile(path.join(__dirname, "../../views/login.html"));
+    console.log("user NO logueado");
+    res.sendFile(path.join(__dirname, "../../views/login.html"));
   }
 }
 
@@ -60,8 +59,13 @@ export const getSignup = (req, res) => {
 }
 
 export const getCatalogo = async (req, res) => {
+  let user = req.user;
   const verProductos = await getDaos.getAll()
-    res.render("catalogo", {verProductos})
+    if (user.username === "admin") {
+      res.render("catalogoAdmin", {verProductos})
+    }else{
+      res.render("catalogo", {verProductos})
+    } 
 }
 
 export const postRegister = async (req, res) =>  {
@@ -106,6 +110,7 @@ export const getLogout = (req, res) => {
 
 export function checkAuth(req, res, next) {
   if (req.isAuthenticated()) {
+    console.log("Usuario Logeado")
     next();
   } else {
     res.redirect("/api/login");

@@ -1,28 +1,26 @@
 import ContenedorMongo from '../../contenedores/contenedorMongo.js'
-import mongoose from 'mongoose';
+import { Carrito } from '../../models/models.js';
+import MongoClient from "../../classes/MongoClient.class.js"
+import DAO from "../../classes/Dao.class.js";
 
-export default class CarritoDaoMongo extends ContenedorMongo{
+
+export default class CarritoDaoMongo extends DAO{
     constructor(){
-        super('carritos', new mongoose.Schema({
-            user: { type: String, require: true, max: 200, unique:true},
-            timestamp: {type: String, required: true},
-            productos: {type: Array, required: true}
-        }))
+        super();
+        this.collection = Carrito
+        this.db = new MongoClient();
     }
 
     async newCart(user){
         console.log("USER: ",user)
         if(! await this.collection.findOne({ username: user})){
-            const doc = new this.collection({ username: user ,timestamp: Date.now(), products: ''})
-            console.log("dentro del if", doc)
-            await doc.save();
-            return doc
+            const userNew = new this.collection({ username: user ,timestamp: Date.now(), products: ''})
+            console.log("dentro del if", userNew)
+            await userNew.save();
+            /* return userNew */
         }else{
             console.log("carrito ya creado")
         }
-        
-
-        
     }
 
     async cartByUsername(user){

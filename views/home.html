@@ -25,7 +25,20 @@
         </form>
     </ul>
 
+    <div class="container">
+      <h3 style="margin:2rem 0;"> Contáctenos:</h3>
+      <form id="formChat" style="margin-top: 2rem;">
+          mail: <input id="idUsuario" type="email" name="mail" class="input-group mb-3" placeholder="Ingrese su mail" required>
+          text: <input id="messageInput" type="text" name="message" class="input-group mb-3" placeholder="mensaje del usuario" required>
+          <input type="submit" value="Enviar"  class="btn btn-primary" style="margin:2rem 0;">
+      </form>
+      </div> 
+      <div class="container" id="totalMessages"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/normalizr@3.6.1/dist/normalizr.browser.min.js"></script>
+    <script src="/chatClient.js"></script>
 </body>
 </html>

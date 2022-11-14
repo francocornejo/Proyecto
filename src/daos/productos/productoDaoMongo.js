@@ -16,7 +16,6 @@ export default class ProductoDaoMongo extends DAO{
         try {
             const doc = new this.collection({title, description, code, price, thumbnail, stock,timestamp:Date.now()})
             await doc.save()   
-            console.log(this.collection)  
             console.log(`Se agrego un nuevo producto : ${doc}`)
             return new ProductoDTO(doc)
         } catch (error) {

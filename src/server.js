@@ -15,9 +15,14 @@ import cluster from"cluster";
 const cpus = os.cpus();
 const iscluster = process.argv[3] == "cluster";
 import logger from'./config/winston.js'
+import configChatMongo from "./chatSocket/chatMongo.js"
+import cookieParser from 'cookie-parser';
+import path from'path'
+
 
 import * as url from 'url';
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+let listenApp = null
 
 app.engine(".hbs", exphbs({ 
     extname: ".hbs", 
@@ -30,8 +35,10 @@ app.engine(".hbs", exphbs({
 );
 app.set("view engine", ".hbs");
 app.use(express.static(__dirname + "../views"));
+app.use(express.static(path.join(__dirname + "./public")))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(cookieParser())
 
 app.use(
   session({
@@ -39,7 +46,7 @@ app.use(
     cookie: {
       httpOnly: false,
       secure: false,
-      maxAge: 20000,
+      maxAge: 1000000
     },
     rolling: true,
     resave: false,
@@ -64,9 +71,8 @@ const registerStrategy = new LocalStrategy(
       try{
           const userExist = await Users.findOne({username})
           if(userExist){
-              return done("Nombre de usuario ya creado", false)
+              return done(null, false)
           }
-            console.log("asd",req.file)
             const nuevoUsuario = {
               username: username,
               password: hashPassword(password),
@@ -92,7 +98,7 @@ const loginStrategy = new LocalStrategy(
       const user = await Users.findOne({username})
 
       if(!user || !isValidPassword(password, user.password)){
-          return done("Credenciales invalidas", null)
+          return done(null, false)
       }
 
       return done(null, user)
@@ -121,7 +127,7 @@ if (iscluster && cluster.isPrimary) {
     cluster.fork();
   });
 } else {
-  app.use("/api", rutas);
+  app.use("/api", rutas); 
   const URL = process.env.URL_MONGO;
   mongoose.connect( URL,{ useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
       
@@ -137,13 +143,16 @@ if (iscluster && cluster.isPrimary) {
           });
       } else {
           console.log('BASE DE DATOS CONECTADA')
-          app.listen(process.env.PORT || 3000, (err) => {
+          
+          listenApp = app.listen(process.env.PORT || 3000, (err) => {
               if(!err){
+                
                   console.log(`Server listening port 3000 - Worker: ${process.pid}`)
               }else {
                   console.log('Error al escuchar el puerto')
               }
           })
+          configChatMongo(listenApp)
       }
   })
 }

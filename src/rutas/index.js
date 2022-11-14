@@ -1,5 +1,5 @@
 import { Router }from 'express';
-import { getProductos, postProductos, getProductoId, putProduct,deleteProduct, loadProduct} from '../controllers/productoController.js';
+import { postProductos, getProductoId, putProduct,deleteProduct} from '../controllers/productoController.js';
 import { postCarrito, deleteCarrito, getUserCart, verCarrito, addProduct, deleteProductFromCart} from '../controllers/carritoController.js';
 import { getLogin, getSignup, postRegister, postLogin, getFailsignup, getFaillogin, getCatalogo, getLogout, checkAuth, rutaProtegida, info, getHome, getUserInfo, getHomeAdmin } from '../controllers/usersController.js'
 const router = Router();
@@ -7,31 +7,31 @@ import upload from '../multer/loadFile.js'
 import passport from 'passport'
 
 //Rutas Productos
-router.get('/productos', getCatalogo)
-router.get('/productos/:id', getProductoId)
-router.post('/productos', postProductos)
-router.put('/productos/:id', putProduct)
-router.delete('/productos/:id', deleteProduct)
-router.post('/load', loadProduct)
+router.get('/productos',checkAuth, getCatalogo)
+router.get('/productos/:id',checkAuth, getProductoId)
+router.post('/productos',checkAuth, postProductos)
+router.put('/productos/:id',checkAuth, putProduct)
+router.get('/productoDelete/:id',checkAuth, deleteProduct)
 
 //Rutas Carrito
-router.post('/carrito', postCarrito)
-router.get('/carrito', getUserCart)
-router.get('/carrito/deleteproducto/:id', deleteProductFromCart)
-router.get('/carrito/:id/productos', verCarrito)
-router.post('/carrito/productos/:id', addProduct)
+router.post('/carrito',checkAuth, postCarrito)
+router.get('/carrito',checkAuth, getUserCart)
+router.get('/carrito/deleteproducto/:id',checkAuth, deleteProductFromCart)
+router.get('/carrito/:id/productos',checkAuth, verCarrito)
+router.post('/carrito/productos/:id',checkAuth, addProduct)
+
 //Rutas de Login y Registro
-router.get("/", getHome) //noAdmin
-router.get("/home", getHomeAdmin)
-router.get("/catalogo", getCatalogo)
+router.get("/",checkAuth, getHome) //noAdmin
+router.get("/home",checkAuth, getHomeAdmin)
+router.get("/catalogo",checkAuth, getCatalogo)
 router.get("/login", getLogin)
-router.post("/login", passport.authenticate("login", {failureRedirect: "/faillogin"}), postLogin)
+router.post("/login", passport.authenticate("login", {failureRedirect: "/api/faillogin"}), postLogin)
 router.get("/register", getSignup)
-router.post("/register", upload.single('avatar'), passport.authenticate("register", { failureRedirect: "/failsignup"}), postRegister)
+router.post("/register", upload.single('avatar'), passport.authenticate("register", { failureRedirect: "/api/failsignup"}), postRegister)
 router.get('/faillogin', getFaillogin)
 router.get("/failsignup", getFailsignup)
-router.get('/logout', getLogout)
-router.get('/infoUser', getUserInfo)
+router.get('/logout',checkAuth, getLogout)
+router.get('/infoUser',checkAuth, getUserInfo)
 
 //Rutas de funciones
 router.get('/ruta-protegida', checkAuth, rutaProtegida)
