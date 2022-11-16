@@ -12,9 +12,7 @@ export const postProductos = async (req, res) => {
 
 export const getProductoId = async (req, res) => {
     const id = req.params.id
-    console.log('id', id)
     const elemento = await getDaos.getById(id)
-    console.log('elemento', elemento)
     if(!elemento){return res.status(404).json({error: "Producto no encontrado"})}
     res.json(elemento)
 }

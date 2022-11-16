@@ -1,4 +1,3 @@
-import ContenedorMongo from '../../contenedores/contenedorMongo.js';
 import ProductoDTO from '../../classes/DTO.class.js'
 import {Productos} from '../../models/models.js'
 import {CustomError} from '../../classes/CustomError.class.js'
@@ -26,7 +25,6 @@ export default class ProductoDaoMongo extends DAO{
     async productById(id){
         try{
             const doc = this.collection.doc(id)
-            console.log(doc)
             return new ProductoDTO(doc);
         }catch(err){
             throw new CustomError(500, err);
@@ -35,8 +33,7 @@ export default class ProductoDaoMongo extends DAO{
     }
     
     async update(id, title, description, code, price, thumbnail, stock){
-        await this.collection.updateOne({_id:id}, {title, description, code, price, thumbnail, stock})
-        console.log(this.collection)  
+        await this.collection.updateOne({_id:id}, {title, description, code, price, thumbnail, stock}) 
         try{
             const producto = await this.getById(id) 
        

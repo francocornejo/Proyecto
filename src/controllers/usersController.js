@@ -41,7 +41,6 @@ export const getHomeAdmin =(req,res)=>{
 export const postLogin = (req, res) => {
   if (req.isAuthenticated()) {
     let user = req.user;
-    console.log("USER",user)
     if (user.username === "admin") {
       res.redirect("/api/home")
     }else{
@@ -69,7 +68,6 @@ export const getCatalogo = async (req, res) => {
 
 export const postRegister = async (req, res) =>  {
     let user = req.user
-    console.log(user)
     if(user){
       res.sendFile(path.join(__dirname, "../../views/register-ok.html"))
     }else{
@@ -79,13 +77,11 @@ export const postRegister = async (req, res) =>  {
 }
 
 export const getFailsignup = (req, res) => {
-  console.log("error en signup");
   res.render("signup-error", {});
 
 }
 
 export const getFaillogin = (req, res) => {
-  console.log("error en login");
   res.render("login-error", {});
 }
 
@@ -96,7 +92,6 @@ export const getLogout = (req, res) => {
 
 export function checkAuth(req, res, next) {
   if (req.isAuthenticated()) {
-    console.log("Usuario Logeado")
     next();
   } else {
     res.redirect("/api/login");

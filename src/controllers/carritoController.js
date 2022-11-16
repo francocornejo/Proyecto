@@ -5,6 +5,8 @@ import {getUserCartService, addProductService, deleteProductFromCartService, car
 import {CarritoDaoFactory} from '../classes/DaoFactory.class.js'
 const DAO = CarritoDaoFactory.getDao()
 
+import { CustomError } from '../classes/CustomError.class.js';
+
 import { OrdenesDaoFactory } from '../classes/DaoFactory.class.js';
 const DAOOrder = OrdenesDaoFactory.getDao();
 
@@ -79,15 +81,13 @@ export const deleteProductFromCart = async (req,res)=>{
 export const cartCheckout = async(req,res) =>{  
     try {
         let user= req.user
-        console.log('user', user)
         let order = await cartCheckoutService(user);
-        console.log("order", order)
         const productos = order.productos
         res.render('compraFinal',{order,layout: null}, (error, html) => {
             EnvioEmail(`Nuevo Pedido de ${user.name} - ${user.username}`, html) 
          })
         res.render('compraFinal', {order})
     } catch (error) {
-        console.log(error)
+        throw new CustomError(500, error);
     } 
 }

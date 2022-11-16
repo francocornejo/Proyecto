@@ -8,18 +8,18 @@ const DAOOrder = OrdenesDaoFactory.getDao();
 
 export const addProductService = async (cantidad,id_prod,username)=>{
     let carrito = await CarritoDao.cartByUsername(username)
-    if(!carrito) { carrito= await CarritoDao.newCart(username)}
-    carrito.productos.map( (prod)=> console.log('prod.id',prod._id))
-    const indice = carrito.productos.findIndex( (prod)=> prod._id === id_prod)
-    console.log(indice)
-    if(indice >= 0){
 
+    if(!carrito) { carrito= await CarritoDao.newCart(username)}
+
+    carrito.productos.map( (prod)=> console.log('prod.id',prod._id))
+
+    const indice = carrito.productos.findIndex( (prod)=> prod._id === id_prod)
+
+    if(indice >= 0){
         carrito.productos[indice].cantidad += cantidad
     }else{
-        console.log('id_prod else',id_prod)
         let producto = await DAO.getById(id_prod)
-                
-        console.log('producto',producto)
+
         carrito.productos.push({
             _id:producto._id,
             title:producto.title,

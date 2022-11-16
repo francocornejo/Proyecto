@@ -11,13 +11,11 @@ export default class UsuarioDaoMongo extends DAO {
 
   async newUser(username, password, nombre, apellido, direccion, edad, telefono, avatar){
     const doc = new this.collection({username, password, nombre, apellido, direccion, edad, telefono, avatar})
-    await doc.save()   
-    console.log(this.collection)       
+    await doc.save();     
   }
 
   async update(id, username, password, nombre, apellido, direccion, edad, telefono, avatar){
-    await this.collection.updateOne({_id:id}, {username, password, nombre, apellido, direccion, edad, telefono, avatar})
-    console.log(this.collection)        
+    await this.collection.updateOne({_id:id}, {username, password, nombre, apellido, direccion, edad, telefono, avatar})        
   }
 
   async getByUsername(username){

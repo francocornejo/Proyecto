@@ -47,7 +47,6 @@ export default class OrdenesDaoMongo extends DAO {
     
     async create(carrito){  
         try {
-            console.log("Carrito", carrito)
             const orden = new this.collection({
                 orderNumber:await this.nextOrderNumber(),
                 username:carrito.username,

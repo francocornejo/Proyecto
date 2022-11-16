@@ -11,8 +11,6 @@ export function configChat(expressServer){
     const io = new Server(expressServer)
 
     io.on('connection', async socket=>{
-        console.log('se conecto un usuario')
-       
         try {
             // PARTE CHAT _ LADO SERVIDOR
             const authorSchema = new schema.Entity('authors',{},{idAttribute:'mail'})
