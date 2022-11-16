@@ -68,6 +68,7 @@ export const getCatalogo = async (req, res) => {
 
 export const postRegister = async (req, res) =>  {
     let user = req.user
+    console.log(user)
     if(user){
       res.sendFile(path.join(__dirname, "../../views/register-ok.html"))
     }else{
