@@ -1,6 +1,10 @@
 import {CarritoDao} from'../daos/index.js'
-import ProductoDaoFactory from '../classes/ProductoDaoFactory.class.js'
+import ProductoDaoFactory from '../classes/DaoFactory.class.js'
 const DAO = ProductoDaoFactory.getDao()
+import { CustomError } from '../classes/CustomError.class.js'
+
+import { OrdenesDaoFactory } from '../classes/DaoFactory.class.js'
+const DAOOrder = OrdenesDaoFactory.getDao();
 
 export const addProductService = async (cantidad,id_prod,username)=>{
     let carrito = await CarritoDao.cartByUsername(username)
@@ -22,7 +26,6 @@ export const addProductService = async (cantidad,id_prod,username)=>{
             price:producto.price,
             cantidad
         })
-        
     }
     carrito = await CarritoDao.update(carrito._id,carrito.productos)
 }
@@ -33,10 +36,18 @@ export const getUserCartService = async (username)=>{
 }
 
 export const cartCheckoutService = async (user)=>{
-    let carrito = await CarritoDao.cartByUsername(user.username)
-    const productos = carrito.productos    
-    await CarritoDao.deleteById(carrito._id)
-    return productos
+    try {
+        let carrito = await CarritoDao.cartByUsername(user.username)  
+        let order = await DAOOrder.create(carrito)
+        // const message= carrito.productos.map(producto=>
+        //     `PRODUCTO: ${producto.title} PRECIO UNIT.: ${producto.price} CANTIDAD: ${producto.cantidad}`  
+        // )
+        const recibido = `El Pedido se encuentra en proceso. Gracias por su compra` ///////////
+        await CarritoDao.deleteById(carrito._id)
+        return order 
+    } catch (error) {
+        throw new CustomError(500, error);
+    }
 }
 export const deleteProductFromCartService = async (id_prod,username)=>{
     let carrito = await CarritoDao.cartByUsername(username)

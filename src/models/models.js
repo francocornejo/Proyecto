@@ -29,6 +29,7 @@ export const Productos = mongoose.model("productos", productoSchema)
 
 const carritoSchema = mongoose.Schema({
   username: { type: String, require: true, max: 200},
+  address: { type: String, require: true, max: 100},
   timestamp: {type: String, required: true},
   productos: {type: Array, required: true}
 })
@@ -42,3 +43,14 @@ const chatSchema = new mongoose.Schema({
 })
 
 export const Chats = mongoose.model("chats", chatSchema)
+
+const ordenSchema = new mongoose.Schema({
+  orderNumber:{ type: Number, require: true},
+  timestamp: { type: Date, required: true },
+  status:{ type: String, require: true},
+  username: { type: String, require: true, max: 200, unique:true},
+  address:{ type: String, require: true},
+  productos: {type: Array, required: true },
+})
+
+export const Ordenes = mongoose.model ("ordenes", ordenSchema)

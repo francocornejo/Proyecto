@@ -2,19 +2,31 @@ import dotenv from 'dotenv'
 dotenv.config()
 import nodemailer from 'nodemailer'
 
-
-export let transporter = nodemailer.createTransport({
+export async function EnvioEmail(subject, html){
+  let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
     secure: true, // true for 465, false for other ports
     auth: {
-      user: "cornejo.francodavid@gmail.com", // generated ethereal user
+      user: process.env.EMAIL_ADMIN, // generated ethereal user
       pass: process.env.MAILER_PASS, // generated ethereal password
     },
   });
 
-  transporter.verify().then(()=>{
-    console.log("ready")
+  const infoEmail = {
+    from: "E-commerce Coder-House",
+    to: process.env.EMAIL_ADMIN,
+    subject: subject,
+    html: html
+  }
+
+  transporter.sendMail(infoEmail, (error, info)=>{
+    if (err) {
+        console.log(err)
+    } else {
+        console.log('Email sent: ' + info.response);
+    }
   })
+} 
 
 /* szgtdgzipcxkfykt */

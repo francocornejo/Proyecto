@@ -1,10 +1,17 @@
 import {CarritoDao} from '../daos/index.js';
+import { EnvioEmail } from '../config/mailer.js';
 import { ProductoDao } from '../daos/index.js';
-import {getUserCartService, addProductService, deleteProductFromCartService} from '../services/cartService.js'
+import {getUserCartService, addProductService, deleteProductFromCartService, cartCheckoutService} from '../services/cartService.js'
+import {CarritoDaoFactory} from '../classes/DaoFactory.class.js'
+const DAO = CarritoDaoFactory.getDao()
+
+import { OrdenesDaoFactory } from '../classes/DaoFactory.class.js';
+const DAOOrder = OrdenesDaoFactory.getDao();
 
 export const postCarrito = async (req, res)=>{
     const usuario = req.user.username
-    const elemento = await CarritoDao.newCart(usuario)
+    const direccion = req.user.address
+    const elemento = await CarritoDao.newCart(usuario, direccion)
     console.log("Elemento: ", elemento)
     res.redirect("/api/carrito")
 }
@@ -67,4 +74,20 @@ export const deleteProductFromCart = async (req,res)=>{
     const username = req.user.username
     await deleteProductFromCartService(id_prod,username)
     res.redirect('/api/carrito') 
+}
+
+export const cartCheckout = async(req,res) =>{  
+    try {
+        let user= req.user
+        console.log('user', user)
+        let order = await cartCheckoutService(user);
+        console.log("order", order)
+        const productos = order.productos
+        res.render('compraFinal',{order,layout: null}, (error, html) => {
+            EnvioEmail(`Nuevo Pedido de ${user.name} - ${user.username}`, html) 
+         })
+        res.render('compraFinal', {order})
+    } catch (error) {
+        console.log(error)
+    } 
 }

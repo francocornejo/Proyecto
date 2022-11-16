@@ -1,4 +1,4 @@
-import ProductoDaoFactory from '../classes/ProductoDaoFactory.class.js'
+import ProductoDaoFactory from '../classes/DaoFactory.class.js'
 const getDaos = ProductoDaoFactory.getDao()
 
 export const postProductos = async (req, res) => {

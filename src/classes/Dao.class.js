@@ -1,5 +1,5 @@
 import {CustomError} from "./CustomError.class.js"
-import ProductoDTO from "./ProductoDTO.class.js";
+import ProductoDTO from "./DTO.class.js";
 
 export default class DAO {
   async getAll() {

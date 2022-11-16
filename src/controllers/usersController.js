@@ -1,7 +1,6 @@
 import path from'path'
 import util from'util'
-import { transporter } from '../config/mailer.js';
-import ProductoDaoFactory from '../classes/ProductoDaoFactory.class.js'
+import ProductoDaoFactory from '../classes/DaoFactory.class.js'
 const getDaos = ProductoDaoFactory.getDao()
 
 
@@ -71,25 +70,12 @@ export const getCatalogo = async (req, res) => {
 export const postRegister = async (req, res) =>  {
     let user = req.user
     console.log(user)
+    if(user){
+      res.sendFile(path.join(__dirname, "../../views/register-ok.html"))
+    }else{
+      console.log("Error en la creacion de usuario")
+    }
 
-    await transporter.sendMail({
-      from: '"Usuario Creado!👻" <cornejo.francodavid@gmail.com>', // sender address
-      to: req.user.email,
-      subject: "Hello ✔",
-      text: "Hello world?",
-      html: `Nuevo Registro de ${req.user.firstName} - ${req.user.username} \n
-      <h1>Datos de Registro</h1>
-      <ul>
-        <li>E-mail: ${req.user.email} </li>
-        <li>Nombre: ${req.user.firstName} </li>
-        <li>Dirección: ${req.user.address} </li>
-        <li>Edad: ${req.user.edad} </li>
-        <li>Teléfono: ${req.user.phone} </li>
-        <li>avatar: http://localhost:8080/image/${req.user.avatar}  </li>
-     </ul>`,
-    });
-
-    res.sendFile(path.join(__dirname, "../../views/register-ok.html"))
 }
 
 export const getFailsignup = (req, res) => {

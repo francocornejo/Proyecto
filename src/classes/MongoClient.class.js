@@ -3,6 +3,7 @@ dotenv.config()
 import mongoose from "mongoose" 
 import {CustomError} from "./CustomError.class.js" 
 import DBClient from "./DBClient.class.js"
+let instance
 
 export default class MongoClient extends DBClient {
   constructor() {
@@ -29,5 +30,13 @@ export default class MongoClient extends DBClient {
     } catch (err) {
       throw new CustomError(500, err);
     }
+  }
+
+  static getInstance() {
+    if (!instance) {
+      instance = new MongoClient();
+      instance.connect()
+    }
+    return instance;
   }
 }

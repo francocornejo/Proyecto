@@ -1,5 +1,5 @@
 import ContenedorMongo from '../../contenedores/contenedorMongo.js';
-import ProductoDTO from '../../classes/ProductoDTO.class.js'
+import ProductoDTO from '../../classes/DTO.class.js'
 import {Productos} from '../../models/models.js'
 import {CustomError} from '../../classes/CustomError.class.js'
 import MongoClient from "../../classes/MongoClient.class.js"
